@@ -1817,6 +1817,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileNameSpan = document.getElementById('file-name-span');
 
     let smartImportData = {};
+    let smartImportItemsList = [];
     let fileContent = "";
 
     if (smartImportBtn) {
@@ -1866,6 +1867,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const results = processSmartImportText(textToAnalyze);
             if (results.count > 0) {
                 smartImportData = results.categories;
+                smartImportItemsList = results.items;
                 renderSmartImportReview(results.items);
                 smartImportReview.classList.remove('hidden');
                 applySmartImportBtn.classList.remove('hidden');
@@ -1886,6 +1888,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (smartImportData.leisure > 0) leisureInput.value = ((parseFloat(leisureInput.value) || 0) + smartImportData.leisure).toFixed(2);
             if (smartImportData.shopping > 0) shoppingInput.value = ((parseFloat(shoppingInput.value) || 0) + smartImportData.shopping).toFixed(2);
             if (smartImportData.extra > 0) extraInput.value = ((parseFloat(extraInput.value) || 0) + smartImportData.extra).toFixed(2);
+
+            // Add events to calendar
+            smartImportItemsList.forEach(item => {
+                let dateStr = item.date;
+                if (!dateStr) {
+                    const today = new Date();
+                    dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                }
+                
+                if (!events[dateStr]) events[dateStr] = [];
+                events[dateStr].push({
+                    category: item.category,
+                    amount: Math.abs(item.amount),
+                    desc: item.desc
+                });
+            });
+
+            localStorage.setItem(getStorageKey('financeEvents'), JSON.stringify(events));
+            syncData('events', events);
+            renderCalendar();
 
             saveCurrentMonthBudget();
             recalculateSummary();
@@ -1926,12 +1948,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isNaN(amount) && amount !== 0) {
                     // La descrizione è tutto ciò che rimane nella riga togliendo l'importo
                     let desc = line.replace(matches[matches.length - 1], '').trim();
-                    desc = desc.replace(/^\d{2}\/\d{2}\/\d{4}/, '').trim(); // Togliamo eventuale data iniziale
+                    
+                    // Cerca una data ovunque nella riga (es. 20/03/2026, 20-03-26, 20-03, ecc)
+                    let itemDate = null;
+                    const dateMatch = line.match(/(\d{1,2})[\/\-\.](\d{1,2})(?:[\/\-\.](\d{2,4}))?/);
+                    
+                    if (dateMatch) {
+                        let [fullDate, day, month, year] = dateMatch;
+                        const today = new Date();
+                        if (!year) year = today.getFullYear().toString();
+                        if (year.length === 2) year = '20' + year;
+                        day = day.padStart(2, '0');
+                        month = month.padStart(2, '0');
+                        itemDate = `${year}-${month}-${day}`;
+                        // Rimuoviamo la data dalla descrizione per pulizia
+                        desc = desc.replace(fullDate, '').trim();
+                    }
 
                     const category = categorizeExpense(desc.toLowerCase(), amount);
                     if (category) {
                         categories[category] += Math.abs(amount);
-                        items.push({ desc: desc || "Movimento senza descrizione", amount, category });
+                        items.push({ desc: desc || "Movimento senza descrizione", amount, category, date: itemDate });
                         count++;
                     }
                 }
@@ -1957,7 +1994,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             div.innerHTML = `
                 <div style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 10px;">
-                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; text-transform: uppercase;">${catName}</span>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; text-transform: uppercase;">${item.date ? `[${item.date.split('-').reverse().join('/')}] ` : ''}${catName}</span>
                     ${item.desc}
                 </div>
                 <div style="font-weight: 600; color: ${color};">
