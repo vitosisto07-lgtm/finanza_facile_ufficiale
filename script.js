@@ -86,9 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedGoalId = null;
     let selectedPaymentMethod = null;
 
+    // Chart logic
+    let dashboardPieChart = null;
+
 
 
     let currentUser = JSON.parse(localStorage.getItem('financeCurrentUser')) || null;
+    let lastActiveTabId = 'tab-budget';
 
     // --- Elements ---
     // Inputs
@@ -140,15 +144,15 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryExpenses.textContent = currency.format(totalExpenses);
         summaryRemaining.textContent = currency.format(remaining);
 
-        // Aggiorna colore rimanenza in base al valore
-        summaryRemaining.className = 'value'; // reseta classe
-        if (remaining > 0) {
-            summaryRemaining.classList.add('success');
-        } else if (remaining < 0) {
-            summaryRemaining.classList.add('danger');
+        if (remaining < 0) {
+            summaryRemaining.style.color = 'var(--danger)';
         } else {
-            summaryRemaining.classList.add('primary');
+            summaryRemaining.style.color = 'var(--text-main)';
         }
+
+        // Update Dashboard Analytics
+        updateDashboardChart();
+        updateDashboardStatus(income, totalExpenses, remaining);
 
         // Genera suggerimenti
         generateAdvice(income, rent, bills, auto, food, totalExpenses, remaining);
@@ -221,6 +225,86 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Also update the account list in the dropdown
         updateLoggedUsersList();
+    }
+
+    function updateDashboardChart() {
+        const ctx = document.getElementById('dashboard-pie-chart');
+        if (!ctx || !window.Chart) return;
+
+        const dataValues = [
+            parseFloat(rentInput.value) || 0,
+            parseFloat(billsInput.value) || 0,
+            parseFloat(autoInput.value) || 0,
+            parseFloat(foodInput.value) || 0,
+            parseFloat(subsInput.value) || 0,
+            parseFloat(leisureInput.value) || 0,
+            parseFloat(shoppingInput.value) || 0,
+            parseFloat(extraInput.value) || 0
+        ];
+
+        const labels = ['Casa', 'Bollette', 'Trasporti', 'Cibo', 'Abbonamenti', 'Svago', 'Shopping', 'Extra'];
+        const colors = ['#4a90e2', '#f39c12', '#e74c3c', '#2ecc71', '#9b59b6', '#1abc9c', '#f1c40f', '#34495e'];
+
+        if (dashboardPieChart) {
+            dashboardPieChart.data.datasets[0].data = dataValues;
+            dashboardPieChart.update();
+        } else {
+            dashboardPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: colors,
+                        borderColor: 'transparent',
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${currency.format(context.raw)}`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '75%'
+                }
+            });
+        }
+    }
+
+    function updateDashboardStatus(income, expenses, remaining) {
+        const statusText = document.getElementById('dashboard-status-text');
+        if (!statusText) return;
+
+        if (income === 0) {
+            statusText.innerHTML = "Inizia inserendo il tuo <b style='color: var(--primary);'>Reddito Mensile</b> nella sezione Budget per vedere l'analisi.";
+            return;
+        }
+
+        const percentUsed = ((expenses / income) * 100).toFixed(0);
+        let message = `<div style="margin-bottom: 1rem;">Hai utilizzato il <b style="color: ${percentUsed > 90 ? 'var(--danger)' : 'var(--primary)'}">${percentUsed}%</b> del tuo budget.</div>`;
+        
+        if (remaining > 0) {
+            message += `<div class="glass-panel" style="padding: 1rem; border-color: var(--success); background: rgba(16, 185, 129, 0.05);">
+                Risparmio attuale previsto: <b style="color: var(--success); font-size: 1.2rem;">${currency.format(remaining)}</b>
+            </div>`;
+        } else if (remaining < 0) {
+            message += `<div class="glass-panel" style="padding: 1rem; border-color: var(--danger); background: rgba(231, 76, 60, 0.05);">
+                Sei in rosso di <b style="color: var(--danger); font-size: 1.2rem;">${currency.format(Math.abs(remaining))}</b>.<br>Riduci le spese opzionali immediatamente.
+            </div>`;
+        } else {
+            message += `<div class="glass-panel" style="padding: 1rem;">Budget perfettamente bilanciato.</div>`;
+        }
+
+        statusText.innerHTML = message;
     }
 
 
@@ -340,6 +424,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (item.key === 'profile_picture') {
                         updateAvatarUI(item.value);
                         localStorage.setItem(getStorageKey('financeProfilePic'), item.value);
+                    }
+                    if (item.key === 'card_gradient') {
+                        const gradient = item.value;
+                        allVirtualCards.forEach(card => card.style.background = gradient);
+                        localStorage.setItem(getStorageKey('financeCardGradient'), gradient);
                     }
                 });
 
@@ -555,6 +644,14 @@ document.addEventListener('DOMContentLoaded', () => {
             authScreen.classList.add('hidden');
             appContainer.classList.remove('hidden');
             currentUserNameDisplay.textContent = currentUser.username;
+            
+            // Aggiorna carta virtuale in tutte le sezioni
+            const cardUsernames = ['virtual-card-username-budget', 'virtual-card-username-settings'];
+            cardUsernames.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = currentUser.username;
+            });
+
             updateLoggedUsersList();
             
             // --- SYNC INITIALIZATION ---
@@ -568,6 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loadGoals();
             renderCalendar();
             initializeLastValues();
+            renderYearlyChart(); // Refresh statistiche annuali
 
             await loadUserData(); 
         } else if (loggedUsers.length > 0) {
@@ -771,6 +869,12 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             if (userDropdown) userDropdown.classList.add('hidden');
 
+            // Salva la tab corrente prima di passare a settings
+            const currentActiveTab = document.querySelector('.tab-pane.active');
+            if (currentActiveTab && currentActiveTab.id !== 'tab-settings') {
+                lastActiveTabId = currentActiveTab.id;
+            }
+
             // Navigate to settings tab via the hidden nav button
             const settingsTabNavBtn = document.querySelector('.nav-btn[data-tab="tab-settings"]');
             if (settingsTabNavBtn) settingsTabNavBtn.click();
@@ -806,7 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    const saveSettingsBtn = document.getElementById('save-profile-btn');
     if (saveSettingsBtn) {
         saveSettingsBtn.addEventListener('click', async () => {
             const newUsername = document.getElementById('settings-username').value.trim();
@@ -1046,41 +1150,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
+            const radius = 36;
+            const circumference = 2 * Math.PI * radius;
+            const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
+
             goalCard.innerHTML = `
                 <button class="delete-goal" onclick="deleteGoal('${goal.id}')">
                     <i class="fa-solid fa-trash"></i>
                 </button>
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <h3>${goal.name}</h3>
-                    ${isCompleted ? '<span class="status-badge status-on-track">Completata</span>' : `<span class="status-badge ${statusClass}">${statusText}</span>`}
-                </div>
-                <div class="goal-progress-container">
-                    <div class="goal-progress-info">
-                        <span>Avanzamento Target (${currency.format(goal.savedAmount || 0)})</span>
-                        <span>${progressPercent}%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
-                    </div>
-                </div>
-                <div class="goal-prediction">
-                    <div class="prediction-item">
-                        <i class="fa-solid fa-piggy-bank"></i>
-                        <span>Pianificato: <b class="editable-deposit" onclick="editGoalDeposit('${goal.id}')">${currency.format(deposit)}/mese</b></span>
-                    </div>
-                    <div class="prediction-item" style="margin-top: 0.5rem;">
-                        <i class="fa-solid fa-clock"></i>
-                        <span>Tempo stimato: <b>${isCompleted ? 'Traguardo raggiunto!' : (monthsLeft + ' mesi')}</b></span>
-                    </div>
-                    <div class="prediction-item" style="margin-top: 0.5rem; justify-content: space-between;">
-                        <span><i class="fa-solid fa-euro-sign"></i> Totale: <b>${currency.format(goal.amount)}</b></span>
-                        <div style="display: flex; gap: 0.5rem;">
-                            ${goal.isPaid ? 
-                                '<span class="status-badge status-on-track" style="background: var(--success); color: white;">Pagato</span>' : 
-                                `<button class="primary-btn" style="width: auto; padding: 5px 15px; font-size: 0.8rem; background: ${isCompleted ? 'var(--success)' : 'var(--primary-light)'};" onclick="depositToGoal('${goal.id}')">${isCompleted ? 'Paga' : 'Deposita'}</button>
-                                 <button class="primary-btn" style="width: auto; padding: 5px 15px; font-size: 0.8rem; background: var(--text-muted);" onclick="toggleGoalComplete('${goal.id}')">${isCompleted ? 'Ripristina' : 'Completa'}</button>`
-                            }
+                    <div style="flex-grow: 1;">
+                        <h3 style="margin-bottom: 0.2rem;">${goal.name}</h3>
+                        ${isCompleted ? '<span class="status-badge status-on-track">Completata</span>' : `<span class="status-badge ${statusClass}">${statusText}</span>`}
+                        <div style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                            <span>${currency.format(goal.savedAmount || 0)} / ${currency.format(goal.amount)}</span>
                         </div>
+                    </div>
+                    
+                    <div class="circular-progress" style="position: relative; width: 85px; height: 85px; flex-shrink: 0; margin-left: 1rem;">
+                        <svg width="85" height="85" viewBox="0 0 85 85" style="transform: rotate(-90deg);">
+                            <circle cx="42.5" cy="42.5" r="${radius}" fill="none" stroke="var(--panel-border)" stroke-width="7"></circle>
+                            <circle cx="42.5" cy="42.5" r="${radius}" fill="none" stroke="var(--primary)" stroke-width="7" 
+                                stroke-dasharray="${circumference}" stroke-dashoffset="${strokeDashoffset}" 
+                                stroke-linecap="round" style="transition: stroke-dashoffset 1s ease-in-out;"></circle>
+                        </svg>
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; color: var(--text-main);">
+                            ${progressPercent}%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="goal-prediction" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--panel-border);">
+                    <div class="prediction-item" style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                        <i class="fa-solid fa-piggy-bank" style="color: var(--primary);"></i>
+                        <span style="font-size: 0.9rem;">Mensile: <b class="editable-deposit" onclick="editGoalDeposit('${goal.id}')" style="cursor:pointer; color: var(--primary);">${currency.format(deposit)}</b></span>
+                    </div>
+                    <div class="prediction-item" style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-clock" style="color: var(--text-muted);"></i>
+                        <span style="font-size: 0.9rem;">Tempo: <b>${isCompleted ? 'Traguardo raggiunto!' : (monthsLeft + ' mesi')}</b></span>
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        ${goal.isPaid ? 
+                            '<span class="status-badge status-on-track" style="background: var(--success); color: white; width: 100%; text-align: center; padding: 0.8rem;">Pagato</span>' : 
+                            `<button class="primary-btn" style="flex: 2; padding: 0.8rem; font-size: 0.9rem; background: ${isCompleted ? 'var(--success)' : 'var(--primary)'};" onclick="depositToGoal('${goal.id}')">
+                                ${isCompleted ? '<i class="fa-solid fa-cart-shopping"></i> Paga Ora' : '<i class="fa-solid fa-plus"></i> Deposita'}
+                             </button>
+                             <button class="primary-btn" style="flex: 1; padding: 0.8rem; font-size: 0.9rem; background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--panel-border);" onclick="toggleGoalComplete('${goal.id}')">
+                                <i class="fa-solid fa-check-double"></i>
+                             </button>`
+                        }
                     </div>
                 </div>
             `;
@@ -1373,6 +1492,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load saved theme
     const savedTheme = localStorage.getItem('financeTheme') || 'default';
     setTheme(savedTheme);
+
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('financeTheme', theme);
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+        });
+    }
+
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setTheme(btn.getAttribute('data-theme'));
+        });
+    });
 
     // Password Toggle Listeners
     document.querySelectorAll('.password-toggle').forEach(button => {
@@ -1848,6 +1981,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    const closeSettingsBtn = document.getElementById('close-settings-btn');
+    if (closeSettingsBtn) {
+        closeSettingsBtn.addEventListener('click', () => {
+            const tabSettings = document.getElementById('tab-settings');
+            if (tabSettings) {
+                tabSettings.classList.remove('active');
+                tabSettings.classList.add('hidden');
+            }
+
+            const prevTab = document.getElementById(lastActiveTabId);
+            if (prevTab) {
+                prevTab.classList.remove('hidden');
+                prevTab.classList.add('active');
+                
+                navBtns.forEach(btn => {
+                    if (btn.getAttribute('data-tab') === lastActiveTabId) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }
 
     // --- Yearly Chart Logic ---
     let yearlyChartInstance = null;
@@ -2445,6 +2603,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             smartImportResultsList.appendChild(div);
+        });
+    }
+
+    // --- REFINED CARD STYLE SELECTION (GRID) ---
+    const allVirtualCards = document.querySelectorAll('.virtual-card');
+    const styleOptions = document.querySelectorAll('.style-option');
+    const settingsCardPreview = document.getElementById('settings-card-preview');
+
+    // Load saved card design on init
+    const savedCardGradient = localStorage.getItem(getStorageKey('financeCardGradient'));
+    if (savedCardGradient) {
+        allVirtualCards.forEach(card => card.style.background = savedCardGradient);
+        // Update active state in grid if it matches
+        styleOptions.forEach(opt => {
+            if (opt.style.background === savedCardGradient) {
+                styleOptions.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+            }
+        });
+    }
+
+    styleOptions.forEach(option => {
+        option.addEventListener('click', async () => {
+            styleOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            
+            const gradient = option.style.background;
+            if (gradient) {
+                // Apply to all virtual cards in the app
+                allVirtualCards.forEach(card => card.style.background = gradient);
+                localStorage.setItem(getStorageKey('financeCardGradient'), gradient);
+                
+                if (supabase) {
+                    await syncData('card_gradient', gradient);
+                }
+            }
+        });
+    });
+
+    // Real-time username preview on card
+    const settingsUsernameInput = document.getElementById('settings-username');
+    const previewCardUsername = document.getElementById('preview-card-username');
+    if (settingsUsernameInput && previewCardUsername) {
+        settingsUsernameInput.addEventListener('input', () => {
+            previewCardUsername.textContent = settingsUsernameInput.value.toUpperCase() || 'USERNAME';
         });
     }
 

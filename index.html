@@ -143,7 +143,8 @@
                             <div class="dropdown-header">Aspetto</div>
                             <div class="theme-switch-container">
                                 <button class="theme-btn active" data-theme="default">Default</button>
-                                <button class="theme-btn" data-theme="black">Black</button>
+                                <button class="theme-btn" data-theme="black">Dark</button>
+                                <button class="theme-btn" data-theme="oled">OLED</button>
                             </div>
                         </div>
                     </div>
@@ -154,7 +155,7 @@
                 <button class="nav-btn active" data-tab="tab-home"><i class="fa-solid fa-house"></i> Home</button>
                 <button class="nav-btn" data-tab="tab-budget"><i class="fa-solid fa-calculator"></i> Budget &
                     Calendario</button>
-                <button class="nav-btn" data-tab="tab-settings" style="display: none;">Impostazioni</button>
+                <button class="nav-btn hidden" data-tab="tab-settings" style="display: none;"><i class="fa-solid fa-gear"></i> Impostazioni</button>
                 <button class="nav-btn" data-tab="tab-goals"><i class="fa-solid fa-bullseye"></i> Obiettivi di
                     Risparmio</button>
                 <button class="nav-btn" data-tab="tab-stats"><i class="fa-solid fa-chart-line"></i> Statistiche
@@ -174,10 +175,23 @@
                             Centro Finanziario</h2>
                         <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin: 0 auto;">
                             Finanza Facile è la tua piattaforma tutto-in-uno per il controllo finanziario completo.
-                            Traccia le tue abitudini di spesa, visualizza i risparmi sul calendario e pianifica i tuoi
-                            traguardi futuri con la nuova sezione dedicata agli Obiettivi. La gestione del denaro
-                            non è mai stata così visiva, interattiva e personalizzata.
                         </p>
+                    </div>
+
+                    <!-- DASHBOARD ANALYTICS CHART -->
+                    <div class="dashboard-overview-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div class="glass-panel" style="padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px;">
+                            <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-chart-pie"></i> Ripartizione Spese Attuali</h3>
+                            <div style="width: 100%; max-width: 300px; position: relative;">
+                                <canvas id="dashboard-pie-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                            <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-lightbulb"></i> Stato Mensile</h3>
+                            <div id="dashboard-status-text" style="font-size: 1.1rem; line-height: 1.6;">
+                                Caricamento dati in corso...
+                            </div>
+                        </div>
                     </div>
 
                     <div class="guide-grid"
@@ -329,9 +343,17 @@
                             <span class="label">Uscite</span>
                             <span class="value danger" id="summary-expenses">€0.00</span>
                         </div>
-                        <div class="summary-card main-card">
-                            <span class="label">Rimanenza Mensile</span>
-                            <span class="value primary" id="summary-remaining">€0.00</span>
+                        <div class="summary-card main-card" style="padding: 0; background: none; border: none; height: 260px;">
+                            <!-- La Carta nel Budget ora è statica -->
+                            <div class="virtual-card" style="margin: 0;">
+                                <div class="card-chip"></div>
+                                <div class="card-label">Saldo Disponibile (Rimanenza)</div>
+                                <div id="summary-remaining" class="card-balance">€0.00</div>
+                                <div class="card-footer-info">
+                                    <div class="card-user-name" id="virtual-card-username-budget">Utente</div>
+                                    <div class="card-logo"><i class="fa-brands fa-cc-visa" style="font-size: 2rem;"></i></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -345,12 +367,10 @@
 
                 <!-- Calendario -->
                 <section class="glass-panel calendar-section">
-                    <div class="calendar-header">
-                        <button id="prev-month" class="icon-btn" aria-label="Mese precedente"><i
-                                class="fa-solid fa-chevron-left"></i></button>
-                        <h2 id="calendar-month-year">Mese Anno</h2>
-                        <button id="next-month" class="icon-btn" aria-label="Mese successivo"><i
-                                class="fa-solid fa-chevron-right"></i></button>
+                    <div class="calendar-header" style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 0.8rem; margin-bottom: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; border: 1px solid var(--panel-border);">
+                        <button id="prev-month" class="icon-btn" style="position: static; background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--panel-border);"><i class="fa-solid fa-chevron-left"></i></button>
+                        <h2 id="calendar-month-year" style="margin: 0; min-width: 180px; text-align: center; color: var(--primary); font-weight: 700;">Mese Anno</h2>
+                        <button id="next-month" class="icon-btn" style="position: static; background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--panel-border);"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                     <div class="calendar-days-header">
                         <div class="day-name">Lun</div>
@@ -460,53 +480,92 @@
                 </div>
             </section>
 
-            <section id="tab-settings" class="tab-pane hidden glass-panel" style="grid-column: 1 / -1;">
-                <h2><i class="fa-solid fa-gear"></i> Impostazioni Account</h2>
+            <!-- SCHEDA IMPOSTAZIONI (Visual Refinement) -->
+            <section id="tab-settings" class="tab-pane hidden" style="grid-column: 1 / -1;">
+                <div class="glass-panel settings-main-panel">
+                    <div class="settings-header-new" style="display: flex; justify-content: space-between; align-items: start;">
+                        <h2 style="border: none; padding: 0; margin-bottom: 2rem;">
+                            <i class="fa-solid fa-gear" style="color: var(--primary);"></i> Impostazioni Account
+                        </h2>
+                        <button id="close-settings-btn" class="icon-btn" style="background: rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
 
-                <div class="settings-container" style="max-width: 600px; margin-top: 2rem;">
-                    <div class="settings-card glass-panel" style="padding: 2rem; border-radius: 12px;">
-                        <h3>Profilo Utente</h3>
-                        <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem;">Modifica le
-                            informazioni del tuo account. Queste modifiche saranno visibili in tutte le sezioni
-                            dell'app.</p>
+                    <div class="settings-grid-layout">
+                        <!-- Profilo Utente Card -->
+                        <div class="settings-card profile-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); padding: 2rem; border-radius: 20px;">
+                            <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Profilo Utente</h3>
+                            <p class="section-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.4;">
+                                Modifica le informazioni del tuo account. Queste modifiche saranno visibili in tutte le sezioni dell'app.
+                            </p>
 
-                        <div class="input-group" style="margin-bottom: 1.5rem;">
-                            <label for="settings-email">Indirizzo Email (Non modificabile)</label>
-                            <div class="input-wrapper" style="background: rgba(255,255,255,0.05);">
-                                <i class="fa-solid fa-envelope" style="color: var(--text-muted);"></i>
-                                <input type="email" id="settings-email" disabled
-                                    style="color: var(--text-muted); cursor: not-allowed;">
-                            </div>
-                        </div>
-
-                        <div class="profile-pic-selection" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
-                            <div class="avatar-preview-container" style="position: relative; width: 120px; height: 120px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
-                                <i class="fa-solid fa-circle-user" style="font-size: 120px; color: var(--text-muted);"></i>
-                                <img src="" alt="Avatar Preview" id="settings-avatar-preview" class="user-avatar hidden" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary);">
-                                <div class="pic-action-btns" style="position: absolute; bottom: 0; right: 0; display: flex; gap: 5px;">
-                                    <button id="change-pic-btn" class="icon-btn" title="Carica Foto" style="position: static; background: var(--primary); color: black; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--panel-bg);">
-                                        <i class="fa-solid fa-upload"></i>
-                                    </button>
-                                    <button id="camera-pic-btn" class="icon-btn" title="Scatta Foto" style="position: static; background: var(--secondary); color: black; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--panel-bg);">
-                                        <i class="fa-solid fa-camera"></i>
-                                    </button>
+                            <!-- Profile Pic Selection (Reintegrated) -->
+                            <div class="profile-pic-selection" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
+                                <div class="avatar-preview-container" style="position: relative; width: 100px; height: 100px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 50%; border: 2px solid var(--panel-border);">
+                                    <i class="fa-solid fa-circle-user" style="font-size: 80px; color: var(--text-muted);"></i>
+                                    <img src="" alt="Avatar Preview" id="settings-avatar-preview" class="user-avatar hidden" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    <div class="pic-action-btns" style="position: absolute; bottom: -5px; right: -5px; display: flex; gap: 5px;">
+                                        <button id="change-pic-btn" class="icon-btn" title="Carica Foto" style="background: var(--primary); color: black; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--panel-bg); font-size: 0.8rem; cursor: pointer;">
+                                            <i class="fa-solid fa-upload"></i>
+                                        </button>
+                                        <button id="camera-pic-btn" class="icon-btn" title="Scatta Foto" style="background: var(--secondary); color: black; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--panel-bg); font-size: 0.8rem; cursor: pointer;">
+                                            <i class="fa-solid fa-camera"></i>
+                                        </button>
+                                    </div>
+                                    <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
                                 </div>
-                                <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">Modifica la tua foto profilo</span>
                             </div>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Carica una foto o scattane una nuova</span>
+
+                            <div class="input-group" style="margin-bottom: 1.5rem;">
+                                <label style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block;">Indirizzo Email (Non modificabile)</label>
+                                <div class="input-wrapper disabled" style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1px solid var(--panel-border); border-radius: 12px; padding: 0.8rem 1rem; gap: 10px;">
+                                    <i class="fa-solid fa-envelope" style="color: var(--text-muted);"></i>
+                                    <input type="email" id="settings-email" readonly placeholder="Caricamento..." style="background: none; border: none; color: var(--text-muted); width: 100%; cursor: not-allowed; font-family: inherit;">
+                                </div>
+                            </div>
+
+                            <div class="input-group" style="margin-bottom: 2rem;">
+                                <label style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block;">Username</label>
+                                <div class="input-wrapper" style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1px solid var(--panel-border); border-radius: 12px; padding: 0.8rem 1rem; gap: 10px;">
+                                    <i class="fa-solid fa-user" style="color: var(--text-muted);"></i>
+                                    <input type="text" id="settings-username" placeholder="Inserisci username" style="background: none; border: none; color: var(--text-main); width: 100%; font-family: inherit;">
+                                </div>
+                            </div>
+
+                            <button id="save-profile-btn" class="primary-btn success-btn" style="background: #1e7e34; color: white; border: none; padding: 1rem; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.3s ease;">
+                                <i class="fa-solid fa-floppy-disk"></i> Salva Modifiche
+                            </button>
                         </div>
 
-                        <div class="input-group" style="margin-bottom: 2rem;">
-                            <label for="settings-username">Username</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-user"></i>
-                                <input type="text" id="settings-username" placeholder="Il tuo username attuale">
+                        <!-- Stile Carta Card -->
+                        <div class="settings-card style-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); padding: 2rem; border-radius: 20px;">
+                            <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Stile Carta</h3>
+                            <p class="section-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.4;">
+                                Personalizza l'aspetto della tua carta virtuale nel dashboard.
+                            </p>
+                            
+                            <div class="card-preview-container" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+                                <div class="virtual-card mini-preview" id="settings-card-preview" style="transform: scale(0.9); margin: 0;">
+                                    <div class="card-chip"></div>
+                                    <div class="card-label">Anteprima</div>
+                                    <div class="card-balance">€1.234,56</div>
+                                    <div class="card-footer-info">
+                                        <div class="card-user-name" id="preview-card-username">USERNAME</div>
+                                        <div class="card-logo"><i class="fa-brands fa-cc-visa" style="font-size: 1.5rem;"></i></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        <button id="save-settings-btn" class="primary-btn"><i class="fa-solid fa-floppy-disk"></i> Salva
-                            Modifiche</button>
-                        <div id="settings-message" style="margin-top: 1rem; text-align: center; font-weight: 500;">
+                            <div class="card-styles-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                                <div class="style-option active" data-style="default" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); aspect-ratio: 1.6; border-radius: 10px; cursor: pointer; border: 2px solid var(--primary);"></div>
+                                <div class="style-option" data-style="purple" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); aspect-ratio: 1.6; border-radius: 10px; cursor: pointer; border: 2px solid transparent;"></div>
+                                <div class="style-option" data-style="blue" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); aspect-ratio: 1.6; border-radius: 10px; cursor: pointer; border: 2px solid transparent;"></div>
+                                <div class="style-option" data-style="gold" style="background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); aspect-ratio: 1.6; border-radius: 10px; cursor: pointer; border: 2px solid transparent;"></div>
+                                <div class="style-option" data-style="crimson" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); aspect-ratio: 1.6; border-radius: 10px; cursor: pointer; border: 2px solid transparent;"></div>
+                                <div class="style-option" data-style="dark" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); aspect-ratio: 1.6; border-radius: 10px; cursor: pointer; border: 2px solid transparent;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
