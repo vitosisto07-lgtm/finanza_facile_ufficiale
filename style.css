@@ -2780,6 +2780,76 @@ header {
     gap: 4px;
 }
 
+/* Dashboards and Layouts */
+.dashboard-overview-grid,
+.guide-grid,
+.feature-grid-family,
+.family-dashboard-layout,
+.stats-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+    .dashboard-overview-grid,
+    .guide-grid,
+    .feature-grid-family,
+    .family-dashboard-layout,
+    .stats-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Grids Refinement */
+.expenses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+}
+
+.goals-input-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.monthly-savings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+/* Family Members Fluidity */
+.family-members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+/* Virtual Card Scaling fix for very small screens */
+@media (max-width: 360px) {
+    .virtual-card {
+        padding: 1.2rem;
+        min-height: 180px;
+    }
+    .card-balance {
+        font-size: 1.5rem;
+    }
+}
+
+/* Cleanup duplicate Budget Tab rules */
+#tab-budget.active {
+    display: grid !important;
+    gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+    #tab-budget.active {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
 /* Account Context Switcher */
 .context-pill {
     display: flex;
@@ -2788,6 +2858,15 @@ header {
     padding: 3px;
     border: 1px solid var(--panel-border);
     margin-right: 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .context-pill {
+        margin-right: 0;
+        margin-bottom: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 .context-btn {
@@ -2811,7 +2890,6 @@ header {
 
 .context-btn span {
     display: none;
-    /* Hide text on mobile */
 }
 
 @media (min-width: 600px) {
@@ -2845,4 +2923,11 @@ body.family-mode-active .nav-btn.active {
 body.family-mode-active .primary-btn:not(.secondary-btn) {
     background: var(--secondary);
     color: #000 !important;
+}
+
+/* Family Management Refinement */
+.family-member {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+}
 }

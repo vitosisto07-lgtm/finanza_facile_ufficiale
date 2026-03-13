@@ -188,7 +188,7 @@
                     </div>
 
                     <!-- DASHBOARD ANALYTICS CHART -->
-                    <div class="dashboard-overview-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div class="dashboard-overview-grid" style="margin-bottom: 3rem;">
                         <div class="glass-panel" style="padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px;">
                             <h3 style="margin-bottom: 0.5rem;" data-i18n="connected_to_family">Sei collegato alla tua Famiglia!</h3>
                             <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 1.5rem;" data-i18n="family_sync_desc">
@@ -206,8 +206,7 @@
                         </div>
                     </div>
 
-                    <div class="guide-grid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem;">
+                    <div class="guide-grid" style="margin-top: 3rem;">
                         <div class="guide-card" style="border-left: 4px solid var(--primary);">
                             <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-basket-shopping" style="color: var(--primary);"></i> <span data-i18n="shopping_list">Lista della Spesa</span></h3>
                             <h3>&nbsp;&nbsp;<i class="fa-solid fa-calculator" style="color: var(--primary);">&nbsp;</i>
@@ -424,7 +423,7 @@
 
                 <div class="input-section" style="margin-top: 2rem;">
                     <h3 data-i18n="new_goal">Nuovo Obiettivo</h3>
-                    <div class="expenses-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="expenses-grid goals-input-grid">
                         <div class="input-group">
                             <label data-i18n="goal_name">Nome Obiettivo</label>
                             <input type="text" id="goal-name" placeholder="es. Vacanza, Nuova Auto" data-i18n-placeholder="placeholder_goal_name">
@@ -481,8 +480,7 @@
                     </div>
                 </div>
 
-                <div class="stats-content"
-                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+                <div id="stats-main-content">
 
                     <div class="chart-container"
                         style="position: relative; height: 350px; display: flex; justify-content: center; align-items: center;">
@@ -504,8 +502,7 @@
                 <!-- Nuovo contenitore per i risparmi mensili -->
                 <div class="monthly-savings-section" style="margin-top: 3rem;">
                     <h3 data-i18n="monthly_savings_year"><i class="fa-solid fa-list-check"></i> Risparmi Mensili dell'Anno</h3>
-                    <div id="monthly-savings-list" class="monthly-savings-grid"
-                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                    <div id="monthly-savings-list" class="monthly-savings-grid" style="margin-top: 1.5rem;">
                         <!-- Elenco generato da JS -->
                     </div>
                 </div>
@@ -648,7 +645,7 @@
                         
                         <!-- Stato Inattivo -->
                         <div id="family-inactive-view-main">
-                            <div class="feature-grid-family" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                            <div class="feature-grid-family" style="margin-bottom: 3rem;">
                                 <div style="text-align: center;">
                                     <i class="fa-solid fa-sync" style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;"></i>
                                     <h4 data-i18n="live_sync">Sincronizzazione Live</h4>
@@ -697,13 +694,13 @@
                                 </div>
                             </div>
 
-                            <div class="family-dashboard-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%;">
+                            <div class="family-dashboard-layout" style="width: 100%;">
 
                                 <!-- Resoconto Famiglia (Spostato in alto per Mobile) -->
                                 <section id="f-summary-section" class="glass-panel summary-section">
                                     <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-chart-line"></i> <span data-i18n="family_summary">Resoconto Famigliare</span></h2>
 
-                                    <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                                    <div class="summary-cards" style="margin-bottom: 2rem;">
                                         <div class="summary-card">
                                             <span class="label" data-i18n="income">Entrate</span>
                                             <span class="value success" id="f-summary-income">€0.00</span>
