@@ -2930,4 +2930,107 @@ body.family-mode-active .primary-btn:not(.secondary-btn) {
     font-size: 0.8rem;
     padding: 6px 10px;
 }
+
+/* --- Compact Mobile Optimization (max-width: 600px) --- */
+@media (max-width: 600px) {
+    .app-container {
+        padding: 0 0.8rem;
+        padding-bottom: 70px;
+    }
+
+    .glass-panel {
+        padding: 1.2rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    h2 {
+        font-size: 1.4rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+
+    .input-group {
+        margin-bottom: 0.8rem !important;
+    }
+
+    .input-group label {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    .input-wrapper input {
+        padding: 0.6rem 0.8rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Virtual Card Compact */
+    .virtual-card {
+        min-height: 160px !important;
+        padding: 1.2rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .card-balance {
+        font-size: 1.6rem !important;
+        margin: 0.5rem 0 !important;
+    }
+
+    .card-label {
+        font-size: 0.7rem !important;
+    }
+
+    .card-chip {
+        width: 35px !important;
+        height: 25px !important;
+    }
+
+    /* Expenses Grid Economy */
+    .expenses-grid {
+        gap: 0.6rem !important;
+    }
+
+    .expense-input {
+        height: 38px !important;
+    }
+
+    /* Family Members List */
+    .family-members-grid {
+        gap: 8px !important;
+    }
+
+    .family-member {
+        padding: 5px 8px !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Dashboard Overview */
+    .dashboard-overview-grid {
+        gap: 1rem !important;
+    }
+
+    .guide-card {
+        padding: 1.2rem !important;
+    }
+
+    /* Navigation Slimming */
+    .app-nav {
+        height: 60px !important;
+    }
+
+    .nav-btn {
+        padding: 0.4rem !important;
+    }
+
+    .nav-btn i {
+        font-size: 1.1rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .nav-btn span {
+        font-size: 0.65rem !important;
+    }
 }

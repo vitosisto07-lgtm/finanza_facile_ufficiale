@@ -3615,7 +3615,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         Object.keys(expensesByCategory).forEach(cat => {
             if (expensesByCategory[cat] > 0) {
-                labels.push(categoryNames[cat]);
+                labels.push(getCategoryName(cat));
                 data.push(expensesByCategory[cat]);
                 backgroundColors.push(colors[cat].bg);
                 borderColors.push(colors[cat].border);
