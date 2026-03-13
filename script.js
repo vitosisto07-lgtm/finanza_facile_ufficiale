@@ -1657,50 +1657,59 @@ document.addEventListener('DOMContentLoaded', () => {
         await checkAuthStatus();
     }
 
+    function switchAccount(user) {
+        if (!user || !user.session) {
+            console.warn("Auth: Impossibile cambiare account, sessione mancante.");
+            alert("Errore: Sessione mancante per " + (user ? user.email : "account sconosciuto"));
+            return;
+        }
+
+        console.log("Auth: ESECUZIONE SWITCH per:", user.email);
+        
+        // Pulizia totale e sicura di TUTTI i dati di sessione di Supabase nel localStorage
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-') || key.includes('supabase-auth-token')) {
+                localStorage.removeItem(key);
+            }
+        });
+
+        // Impostiamo il nuovo utente come corrente
+        localStorage.setItem('financeCurrentUser', JSON.stringify(user));
+        
+        // Feedback visivo immediato per confermare l'avvio
+        document.body.style.opacity = '0.5';
+        document.body.style.filter = 'grayscale(1)';
+        document.body.style.pointerEvents = 'none';
+        
+        console.log("Auth: Reload in corso...");
+        setTimeout(() => {
+            location.reload();
+        }, 100);
+    }
+
     async function handleLogout() {
         console.log("Auth: Esecuzione logout...");
-        
         if (currentUser) {
             let loggedUsers = JSON.parse(localStorage.getItem('financeLoggedUsers')) || [];
-            
-            // 1. Rimuoviamo la sessione attiva dall'utente corrente nella lista globale
             const idx = loggedUsers.findIndex(u => u.email === currentUser.email);
             if (idx >= 0) {
                 delete loggedUsers[idx].session;
                 localStorage.setItem('financeLoggedUsers', JSON.stringify(loggedUsers));
             }
-            
-            // 2. Logout effettivo da Supabase (pulisce cookie/localStorage di Supabase)
             if (supabase) await supabase.auth.signOut();
-            
-            // 3. Rimuoviamo l'utente corrente attivo
             localStorage.removeItem('financeCurrentUser');
             const oldUserEmail = currentUser.email;
             currentUser = null;
-            
-            // 4. Cerchiamo se c'è un ALTRO account che ha ancora una sessione attiva
             const nextActiveUser = loggedUsers.find(u => u.session && u.email !== oldUserEmail);
-            
             if (nextActiveUser) {
-                console.log("Auth: Passaggio automatico all'account attivo:", nextActiveUser.email);
                 localStorage.setItem('financeCurrentUser', JSON.stringify(nextActiveUser));
-            } else {
-                console.log("Auth: Nessun altro account attivo.");
             }
         }
-        
-        // Svuota i dati in memoria
         monthlyBudgets = {};
         events = {};
         familyMonthlyBudgets = {};
         familyEvents = {};
         lastInputValues = {};
-        
-        // Forza il reset della UI prima del reload (per sicurezza visiva)
-        const appInt = document.getElementById('app-interface');
-        if (appInt) appInt.classList.add('hidden');
-        
-        // Ricarica la pagina per resettare tutto lo stato JS
         location.reload();
     }
 
@@ -1745,14 +1754,28 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                             
                             if (sessionError) {
-                                console.warn("Auth: Ripristino fallito:", sessionError.message);
-                                handleLogout();
+                                console.warn("Auth: Ripristino fallito per:", currentUser.email, sessionError.message);
+                                
+                                // Rimuoviamo la sessione non piÃ¹ valida dai loggedUsers per forzare ri-login
+                                let loggedUsers = JSON.parse(localStorage.getItem('financeLoggedUsers')) || [];
+                                const idx = loggedUsers.findIndex(u => u.email === currentUser.email);
+                                if (idx >= 0) {
+                                    delete loggedUsers[idx].session;
+                                    localStorage.setItem('financeLoggedUsers', JSON.stringify(loggedUsers));
+                                }
+
+                                // Invece di fare handleLogout (che farebbe switch), resettiamo solo l'utente attuale
+                                localStorage.removeItem('financeCurrentUser');
+                                currentUser = null;
+                                location.reload();
                                 return;
                             }
                             console.log("Auth: Sessione sincronizzata con successo.");
                         } else {
-                            console.warn("Auth: Dati sessione locali mancanti. Logout forzato.");
-                            handleLogout();
+                            console.warn("Auth: Dati sessione locali mancanti. Reset utente.");
+                            localStorage.removeItem('financeCurrentUser');
+                            currentUser = null;
+                            location.reload();
                             return;
                         }
                     } else {
@@ -1877,14 +1900,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Click per accedere
             item.addEventListener('click', () => {
                 if (user.session) {
-                    console.log("Auth: Accesso rapido a:", user.email);
-                    
-                    // Pulizia preventiva dei token interni di Supabase per evitare conflitti al ricaricamento
-                    const supabasePrefix = "sb-hkcsuledqzpzqlawygsg-auth-token"; // Match con SUPABASE_URL
-                    localStorage.removeItem(supabasePrefix);
-                    
-                    localStorage.setItem('financeCurrentUser', JSON.stringify(user));
-                    location.reload();
+                    switchAccount(user);
                 } else {
                     // Se non c'è sessione (perché abbiamo fatto logout), mostriamo il form login pre-compilato
                     const loginEmailInput = document.getElementById('login-email');
@@ -1905,7 +1921,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Click per eliminare (non propaga al login)
             const delBtn = item.querySelector('.delete-account-btn');
-            delBtn.addEventListener('click', (e) => {
+            delBtn.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 if (confirm(`Rimuovere l'account di ${user.username} da questo dispositivo?`)) {
                     let users = JSON.parse(localStorage.getItem('financeLoggedUsers')) || [];
@@ -1916,7 +1932,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (currentUser && currentUser.email === user.email) {
                         localStorage.removeItem('financeCurrentUser');
                         currentUser = null;
-                        if (supabase) supabase.auth.signOut();
+                        if (supabase) await supabase.auth.signOut();
                         location.reload();
                     } else {
                         checkAuthStatus(); // Aggiorna UI se era un altro account
@@ -1960,45 +1976,39 @@ document.addEventListener('DOMContentLoaded', () => {
             userBtn.style.borderRadius = '8px';
             userBtn.style.marginBottom = '4px';
             userBtn.style.transition = 'background 0.2s';
+            userBtn.style.position = 'relative';
+            userBtn.style.zIndex = '5';
+            userBtn.style.pointerEvents = 'auto'; // Forza la ricezione dei click
 
             const userPic = localStorage.getItem(`${user.email}_financeProfilePic`);
             const avatarHtml = userPic 
-                ? `<img src="${userPic}" class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">` 
-                : `<i class="fa-solid fa-circle-user" style="font-size: 28px; color: var(--text-muted); flex-shrink: 0;"></i>`;
+                ? `<img src="${userPic}" class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; pointer-events: none;">` 
+                : `<i class="fa-solid fa-circle-user" style="font-size: 28px; color: var(--text-muted); flex-shrink: 0; pointer-events: none;"></i>`;
 
             userBtn.innerHTML = `
                 ${avatarHtml} 
                 <div style="flex-grow: 1; text-align: left; display: flex; flex-direction: column; overflow: hidden; pointer-events: none;">
-                    <span style="font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${user.username}</span>
-                    <span style="font-size: 0.75rem; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${user.email}</span>
+                    <span style="font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none;">${user.username}</span>
+                    <span style="font-size: 0.75rem; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none;">${user.email}</span>
                 </div>
                 ${isCurrent ? '<i class="fa-solid fa-check" style="color: var(--success); pointer-events: none;"></i>' : ''}
             `;
 
             if (!isCurrent) {
                 userBtn.addEventListener('click', (e) => {
+                    console.log("Auth: CLICK RILEVATO su account:", user.email);
                     e.preventDefault();
                     e.stopPropagation();
-                    
-                    if (user.session) {
-                        console.log("Auth: Passaggio account a:", user.email);
-                        
-                        // Pulizia preventiva dei token interni di Supabase per garantire il ripristino pulito del nuovo account
-                        const supabasePrefix = "sb-hkcsuledqzpzqlawygsg-auth-token";
-                        localStorage.removeItem(supabasePrefix);
-                        
-                        // Salviamo il nuovo utente come corrente e ricarichiamo.
-                        // checkAuthStatus al ricaricamento gestirà il setSession in modo pulito.
-                        localStorage.setItem('financeCurrentUser', JSON.stringify(user));
-                        location.reload(); 
-                    } else {
-                        console.warn("Auth: Sessione mancante per l'account.");
-                    }
+                    switchAccount(user);
                 });
 
-                // Effetto hover manuale se necessario
-                userBtn.addEventListener('mouseenter', () => { userBtn.style.background = 'rgba(255, 255, 255, 0.1)'; });
-                userBtn.addEventListener('mouseleave', () => { userBtn.style.background = 'transparent'; });
+                userBtn.addEventListener('mouseenter', () => { 
+                    userBtn.style.background = 'rgba(255, 255, 255, 0.1)'; 
+                    console.log("Auth: Hover su:", user.email);
+                });
+                userBtn.addEventListener('mouseleave', () => { 
+                    userBtn.style.background = 'transparent'; 
+                });
             }
             
             listContainer.appendChild(userBtn);
@@ -2069,6 +2079,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             currentUser = null;
             localStorage.removeItem('financeCurrentUser');
+            
+            // Pulizia preventiva dei token Supabase per evitare conflitti con la nuova sessione
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('sb-') || key.includes('supabase-auth-token')) {
+                    localStorage.removeItem(key);
+                }
+            });
             
             // Pulisci le variabili globali di stato UI prima del nuovo login
             monthlyBudgets = {};

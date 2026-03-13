@@ -245,6 +245,42 @@
 
             <!-- SCHEDA BUDGET E CALENDARIO -->
             <section id="tab-budget" class="tab-pane hidden" style="display: contents;">
+                
+                <!-- Resoconto (Moved to top for mobile priority) -->
+                <section id="summary-section" class="glass-panel summary-section hidden">
+                    <h2 data-i18n="summary"><i class="fa-solid fa-chart-line"></i> Resoconto</h2>
+
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <span class="label" data-i18n="income">Entrate</span>
+                            <span class="value success" id="summary-income">€0.00</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="label" data-i18n="expenses">Uscite</span>
+                            <span class="value danger" id="summary-expenses">€0.00</span>
+                        </div>
+                        <div class="summary-card main-card" style="padding: 0; background: none; border: none; height: 260px;">
+                            <!-- La Carta nel Budget ora è modificabile -->
+                            <div class="virtual-card card-style-ocean" id="virtual-card-budget" style="margin: 0;">
+                                <div class="card-chip"></div>
+                                <div class="card-label" data-i18n="available_balance">Saldo Disponibile (Rimanenza)</div>
+                                <div id="summary-remaining" class="card-balance">€0.00</div>
+                                <div class="card-footer-info">
+                                    <div class="card-user-name" id="virtual-card-username-budget" data-i18n="user">Utente</div>
+                                    <div class="card-logo"><i class="fa-brands fa-cc-visa" style="font-size: 2rem;"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="advice-box" id="advice-box">
+                        <h3><i class="fa-solid fa-lightbulb"></i> <span data-i18n="saving_tips">Suggerimenti per Risparmiare</span></h3>
+                        <ul id="advice-list">
+                            <!-- Suggerimenti dinamici -->
+                        </ul>
+                    </div>
+                </section>
+
                 <!-- Colonna Sinistra: Input Dati -->
                 <section class="glass-panel input-section">
                     <div
@@ -359,40 +395,6 @@
                     </div>
                 </section>
 
-                <!-- Resoconto -->
-                <section id="summary-section" class="glass-panel summary-section hidden">
-                    <h2 data-i18n="summary"><i class="fa-solid fa-chart-line"></i> Resoconto</h2>
-
-                    <div class="summary-cards">
-                        <div class="summary-card">
-                            <span class="label" data-i18n="income">Entrate</span>
-                            <span class="value success" id="summary-income">€0.00</span>
-                        </div>
-                        <div class="summary-card">
-                            <span class="label" data-i18n="expenses">Uscite</span>
-                            <span class="value danger" id="summary-expenses">€0.00</span>
-                        </div>
-                        <div class="summary-card main-card" style="padding: 0; background: none; border: none; height: 260px;">
-                            <!-- La Carta nel Budget ora è modificabile -->
-                            <div class="virtual-card card-style-ocean" id="virtual-card-budget" style="margin: 0;">
-                                <div class="card-chip"></div>
-                                <div class="card-label" data-i18n="available_balance">Saldo Disponibile (Rimanenza)</div>
-                                <div id="summary-remaining" class="card-balance">€0.00</div>
-                                <div class="card-footer-info">
-                                    <div class="card-user-name" id="virtual-card-username-budget" data-i18n="user">Utente</div>
-                                    <div class="card-logo"><i class="fa-brands fa-cc-visa" style="font-size: 2rem;"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="advice-box" id="advice-box">
-                        <h3><i class="fa-solid fa-lightbulb"></i> <span data-i18n="saving_tips">Suggerimenti per Risparmiare</span></h3>
-                        <ul id="advice-list">
-                            <!-- Suggerimenti dinamici -->
-                        </ul>
-                    </div>
-                </section>
 
                 <!-- Calendario -->
                 <section class="glass-panel calendar-section">
