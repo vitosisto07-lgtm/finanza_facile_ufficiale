@@ -346,7 +346,27 @@ document.addEventListener('DOMContentLoaded', () => {
             'confirm_deposit': 'Conferma Deposito',
             'profile_pic': 'Foto Profilo',
             'choose_gallery': 'Scegli dalla Galleria',
-            'take_photo': 'Scatta una Foto'
+            'take_photo': 'Scatta una Foto',
+            // Family Page Additions
+            'live_sync': 'Sincronizzazione Live',
+            'live_sync_desc': 'Ogni spesa aggiunta è visibile istantaneamente.',
+            'expense_attribution': 'Attribuzione Spese',
+            'expense_attribution_desc': 'Saprete sempre chi ha inserito ogni movimento.',
+            'or': 'OPPURE',
+            'placeholder_enter_code': 'Inserisci Codice...',
+            'join': 'Unisci',
+            'family_finance': 'Finanza Familiare',
+            'family_finance_desc': 'Collaborazione in tempo reale per le spese di casa.',
+            'shared_dashboard': 'Dashboard Condiviso:',
+            'copy': 'COPIA',
+            'leave': 'ESCI',
+            'family_summary': 'Resoconto Famigliare',
+            'shared_remainder': 'Rimanenza Comune',
+            'family_finance_caps': 'FINANZA FAMIGLIA',
+            'family_members': 'Membri della Famiglia',
+            'family_collaboration_desc': 'Collaborazione in tempo reale. I membri possono vedere e modificare il budget.',
+            'common_monthly_income': 'Reddito Comune Mensile (€)',
+            'placeholder_income_f': 'Es. 3000'
         },
         'en': {
             'app_title': 'FinanceAI - Your Financial Assistant',
@@ -484,7 +504,27 @@ document.addEventListener('DOMContentLoaded', () => {
             'confirm_deposit': 'Confirm Deposit',
             'profile_pic': 'Profile Picture',
             'choose_gallery': 'Choose from Gallery',
-            'take_photo': 'Take a Photo'
+            'take_photo': 'Take a Photo',
+            // Family Page Additions
+            'live_sync': 'Live Sync',
+            'live_sync_desc': 'Every expense added is instantly visible.',
+            'expense_attribution': 'Expense Attribution',
+            'expense_attribution_desc': 'You will always know who entered each movement.',
+            'or': 'OR',
+            'placeholder_enter_code': 'Enter Code...',
+            'join': 'Join',
+            'family_finance': 'Family Finance',
+            'family_finance_desc': 'Real-time collaboration for home expenses.',
+            'shared_dashboard': 'Shared Dashboard:',
+            'copy': 'COPY',
+            'leave': 'LEAVE',
+            'family_summary': 'Family Summary',
+            'shared_remainder': 'Shared Remainder',
+            'family_finance_caps': 'FAMILY FINANCE',
+            'family_members': 'Family Members',
+            'family_collaboration_desc': 'Real-time collaboration. Members can see and edit the budget.',
+            'common_monthly_income': 'Common Monthly Income (€)',
+            'placeholder_income_f': 'e.g. 3000'
         },
         'es': {
             'app_title': 'FinanceAI - Tu Asistente Financiero',
@@ -622,7 +662,27 @@ document.addEventListener('DOMContentLoaded', () => {
             'confirm_deposit': 'Confirmar Depósito',
             'profile_pic': 'Foto de Perfil',
             'choose_gallery': 'Elegir de la Galería',
-            'take_photo': 'Hacer una Foto'
+            'take_photo': 'Hacer una Foto',
+            // Family Page Additions
+            'live_sync': 'Sincronización en Vivo',
+            'live_sync_desc': 'Cada gasto añadido es visible al instante.',
+            'expense_attribution': 'Atribución de Gastos',
+            'expense_attribution_desc': 'Siempre sabrás quién introdujo cada movimiento.',
+            'or': 'O BIEN',
+            'placeholder_enter_code': 'Introduce el Código...',
+            'join': 'Unirse',
+            'family_finance': 'Finanzas Familiares',
+            'family_finance_desc': 'Colaboración en tiempo real para los gastos del hogar.',
+            'shared_dashboard': 'Panel Compartido:',
+            'copy': 'COPIAR',
+            'leave': 'SALIR',
+            'family_summary': 'Resumen Familiar',
+            'shared_remainder': 'Remanente Común',
+            'family_finance_caps': 'FINANZAS FAMILIARES',
+            'family_members': 'Miembros de la Familia',
+            'family_collaboration_desc': 'Colaboración en tiempo real. Los miembros pueden ver y editar el presupuesto.',
+            'common_monthly_income': 'Ingresos Comunes Mensuales (€)',
+            'placeholder_income_f': 'ej. 3000'
         },
         'fr': {
             'app_title': 'FinanceAI - Votre Assistant Financier',
@@ -760,7 +820,27 @@ document.addEventListener('DOMContentLoaded', () => {
             'confirm_deposit': 'Confirmer Dépôt',
             'profile_pic': 'Photo de Profil',
             'choose_gallery': 'Choisir dans la Galerie',
-            'take_photo': 'Prendre une Photo'
+            'take_photo': 'Prendre une Photo',
+            // Family Page Additions
+            'live_sync': 'Synchronisation en Direct',
+            'live_sync_desc': 'Chaque dépense ajoutée est instantanément visible.',
+            'expense_attribution': 'Attribution des Dépenses',
+            'expense_attribution_desc': 'Vous saurez toujours qui a saisi chaque mouvement.',
+            'or': 'OU BIEN',
+            'placeholder_enter_code': 'Entrez le Code...',
+            'join': 'Rejoindre',
+            'family_finance': 'Finance Familiale',
+            'family_finance_desc': 'Collaboration en temps réel pour le budget domestique.',
+            'shared_dashboard': 'Tableau de Bord Partagé :',
+            'copy': 'COPIER',
+            'leave': 'QUITTER',
+            'family_summary': 'Résumé Familial',
+            'shared_remainder': 'Reste Commun',
+            'family_finance_caps': 'FINANCE FAMILIALE',
+            'family_members': 'Membres de la Famille',
+            'family_collaboration_desc': 'Collaboration en temps réel. Les membres peuvent voir et modifier le budget.',
+            'common_monthly_income': 'Revenu Mensuel Commun (€)',
+            'placeholder_income_f': 'ex. 3000'
         }
     };
 
@@ -1660,11 +1740,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function switchAccount(user) {
         if (!user || !user.session) {
             console.warn("Auth: Impossibile cambiare account, sessione mancante.");
-            alert("Errore: Sessione mancante per " + (user ? user.email : "account sconosciuto"));
+            alert("ERRORE CRITICO: Sessione mancante per " + (user ? user.email : "account sconosciuto"));
             return;
         }
 
-        console.log("Auth: ESECUZIONE SWITCH per:", user.email);
+        console.error("Auth: >>> AVVIO SWITCH ACCOUNT PER:", user.email, "<<<");
         
         // Pulizia totale e sicura di TUTTI i dati di sessione di Supabase nel localStorage
         Object.keys(localStorage).forEach(key => {
@@ -1676,15 +1756,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Impostiamo il nuovo utente come corrente
         localStorage.setItem('financeCurrentUser', JSON.stringify(user));
         
-        // Feedback visivo immediato per confermare l'avvio
-        document.body.style.opacity = '0.5';
-        document.body.style.filter = 'grayscale(1)';
-        document.body.style.pointerEvents = 'none';
+        // Feedback visivo "estremo" per confermare l'avvio
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '9999';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.color = 'white';
+        overlay.style.fontSize = '2rem';
+        overlay.innerHTML = 'Cambio account in corso...';
+        document.body.appendChild(overlay);
         
         console.log("Auth: Reload in corso...");
         setTimeout(() => {
-            location.reload();
-        }, 100);
+            location.href = location.href; // Forza reload totale
+        }, 150);
     }
 
     async function handleLogout() {
@@ -1950,20 +2042,20 @@ document.addEventListener('DOMContentLoaded', () => {
         listContainer.innerHTML = '';
         let loggedUsers = JSON.parse(localStorage.getItem('financeLoggedUsers')) || [];
 
-        // Filtriamo per mostrare solo l'utente corrente e gli altri account che hanno una sessione ATTIVA e VALIDA
+        console.error("Auth: Aggiornamento lista utenti. Totale salvati:", loggedUsers.length);
         const activeUsers = loggedUsers.filter(user => {
-            const isCurrent = currentUser && currentUser.email === user.email;
-            // Un account è considerato attivo se è l'attuale o se ha una sessione salvata
+            const isCurrent = currentUser && currentUser.email && user.email && 
+                              currentUser.email.trim().toLowerCase() === user.email.trim().toLowerCase();
             return isCurrent || (user.session && user.session.access_token);
         });
 
         activeUsers.forEach(user => {
-            const isCurrent = currentUser && currentUser.email === user.email;
+            const isCurrent = currentUser && currentUser.email && user.email && 
+                              currentUser.email.trim().toLowerCase() === user.email.trim().toLowerCase();
             const userBtn = document.createElement('button');
             userBtn.type = 'button';
             userBtn.className = 'dropdown-item' + (isCurrent ? ' active' : '');
             
-            // Applichiamo stili inline per garantire che il bottone occupi tutto lo spazio e sia cliccabile
             userBtn.style.width = '100%';
             userBtn.style.display = 'flex';
             userBtn.style.alignItems = 'center';
@@ -1978,7 +2070,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userBtn.style.transition = 'background 0.2s';
             userBtn.style.position = 'relative';
             userBtn.style.zIndex = '5';
-            userBtn.style.pointerEvents = 'auto'; // Forza la ricezione dei click
+            userBtn.style.pointerEvents = 'auto';
 
             const userPic = localStorage.getItem(`${user.email}_financeProfilePic`);
             const avatarHtml = userPic 
@@ -1995,24 +2087,24 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             if (!isCurrent) {
-                userBtn.addEventListener('click', (e) => {
-                    console.log("Auth: CLICK RILEVATO su account:", user.email);
-                    e.preventDefault();
-                    e.stopPropagation();
-                    switchAccount(user);
-                });
-
-                userBtn.addEventListener('mouseenter', () => { 
-                    userBtn.style.background = 'rgba(255, 255, 255, 0.1)'; 
-                    console.log("Auth: Hover su:", user.email);
-                });
-                userBtn.addEventListener('mouseleave', () => { 
-                    userBtn.style.background = 'transparent'; 
-                });
+                // Marcatura per delegazione
+                userBtn.classList.add('switch-target');
+                userBtn.setAttribute('data-email', user.email);
             }
             
             listContainer.appendChild(userBtn);
         });
+
+        // Delegazione evento sul container per massima affidabilità
+        listContainer.onclick = (e) => {
+            const btn = e.target.closest('.switch-target');
+            if (btn) {
+                const email = btn.getAttribute('data-email');
+                console.error("Auth: DELEGAZIONE CLICK per:", email);
+                const user = activeUsers.find(u => u.email === email);
+                if (user) switchAccount(user);
+            }
+        };
     }
 
     // --- Auth Listeners ---
@@ -2058,9 +2150,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', () => {
-        if (userDropdown) userDropdown.classList.add('hidden');
+    // Ripristinato: Chiudi menù al click esterno
+    document.addEventListener('click', (e) => {
+        if (userDropdown && !userDropdown.classList.contains('hidden')) {
+            if (!userMenuToggle.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+        }
     });
 
     if (logoutBtnDropdown) {

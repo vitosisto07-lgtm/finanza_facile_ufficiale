@@ -651,13 +651,13 @@
                             <div class="feature-grid-family" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
                                 <div style="text-align: center;">
                                     <i class="fa-solid fa-sync" style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;"></i>
-                                    <h4>Sincronizzazione Live</h4>
-                                    <p style="font-size: 0.85rem; color: var(--text-muted);">Ogni spesa aggiunta è visibile istantaneamente.</p>
+                                    <h4 data-i18n="live_sync">Sincronizzazione Live</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="live_sync_desc">Ogni spesa aggiunta è visibile istantaneamente.</p>
                                 </div>
                                 <div style="text-align: center;">
                                     <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-clock-rotate-left" style="color: var(--secondary);"></i> <span data-i18n="recent_movements">Movimenti Recenti</span></h3><i class="fa-solid fa-user-tag" style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 1rem;"></i>
-                                    <h4>Attribuzione Spese</h4>
-                                    <p style="font-size: 0.85rem; color: var(--text-muted);">Saprete sempre chi ha inserito ogni movimento.</p>
+                                    <h4 data-i18n="expense_attribution">Attribuzione Spese</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="expense_attribution_desc">Saprete sempre chi ha inserito ogni movimento.</p>
                                 </div>
                             </div>
 
@@ -665,10 +665,10 @@
                                 <button id="create-family-btn-main" class="pill-btn primary-btn" style="width: 100%;">
                                     <i class="fa-solid fa-users-rectangle"></i> <span data-i18n="create_family_group">Crea Gruppo Familiare</span>
                                 </button>
-                                <span style="color: var(--text-muted); font-weight: 500;">OPPURE</span>
+                                <span style="color: var(--text-muted); font-weight: 500;" data-i18n="or">OPPURE</span>
                                 <div style="display: flex; gap: 8px; background: var(--panel-bg); padding: 5px; border-radius: 12px; border: 1px solid var(--panel-border);">
-                                    <input type="text" id="join-family-code-main" placeholder="Inserisci Codice..." style="background: none; border: none; color: white; padding: 0 15px; width: 180px; font-family: monospace; letter-spacing: 1px;">
-                                    <button id="join-family-btn-main" class="pill-btn primary-btn" style="width: 100%;">Unisci</button>
+                                    <input type="text" id="join-family-code-main" placeholder="Inserisci Codice..." style="background: none; border: none; color: white; padding: 0 15px; width: 180px; font-family: monospace; letter-spacing: 1px;" data-i18n-placeholder="placeholder_enter_code">
+                                    <button id="join-family-btn-main" class="pill-btn primary-btn" style="width: 100%;" data-i18n="join">Unisci</button>
                                 </div>
                             </div>
                         </div>
@@ -679,135 +679,135 @@
                                 <div style="display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); border-radius: 20px; margin-bottom: 1.5rem; color: var(--success); font-size: 1.8rem;">
                                     <i class="fa-solid fa-house-user"></i>
                                 </div>
-                                <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; text-align: center;">Finanza Familiare</h2>
-                                <p style="font-size: 1.1rem; color: var(--text-muted);">Collaborazione in tempo reale per le spese di casa.</p>
+                                <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; text-align: center;" data-i18n="family_finance">Finanza Familiare</h2>
+                                <p style="font-size: 1.1rem; color: var(--text-muted);" data-i18n="family_finance_desc">Collaborazione in tempo reale per le spese di casa.</p>
                             </div>
 
                             <div class="family-header-info" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; background: var(--panel-bg); padding: 1rem 1.5rem; border-radius: 15px; border: 1px solid var(--panel-border);">
                                 <div style="display: flex; align-items: center; gap: 10px;">
                                     <i class="fa-solid fa-circle-check" style="color: var(--success);"></i>
-                                    <span style="font-weight: 600;">Dashboard Condiviso: <span id="display-family-code-main" style="font-family: monospace; color: var(--text-main);"></span></span>
+                                    <span style="font-weight: 600;" data-i18n="shared_dashboard">Dashboard Condiviso: <span id="display-family-code-main" style="font-family: monospace; color: var(--text-main);"></span></span>
                                 </div>
                                 <div style="display: flex; gap: 10px;">
-                                    <button id="copy-family-code-main" class="pill-btn primary-btn" style="width: auto; padding: 0.6rem 1.2rem; font-size: 0.8rem;"><i class="fa-solid fa-copy"></i> COPIA</button>
-                                    <button id="leave-family-btn-main" class="pill-btn danger-btn" style="width: auto; padding: 0.6rem 1.2rem; font-size: 0.8rem;">ESCI</button>
+                                    <button id="copy-family-code-main" class="pill-btn primary-btn" style="width: auto; padding: 0.6rem 1.2rem; font-size: 0.8rem;"><i class="fa-solid fa-copy"></i> <span data-i18n="copy">COPIA</span></button>
+                                    <button id="leave-family-btn-main" class="pill-btn danger-btn" style="width: auto; padding: 0.6rem 1.2rem; font-size: 0.8rem;" data-i18n="leave">ESCI</button>
                                 </div>
                             </div>
 
                             <div class="family-dashboard-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%;">
 
-                            <!-- Colonna Sinistra: Input Dati -->
-                            <section class="glass-panel input-section">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                                    <h2 style="margin: 0;"><i class="fa-solid fa-wallet"></i> Il Tuo Budget Famigliare</h2>
-                                </div>
-
-                                    <div class="input-group">
-                                        <label for="f-income">Reddito Comune Mensile (€)</label>
-                                        <div class="input-wrapper">
-                                            <i class="fa-solid fa-euro-sign"></i>
-                                            <input type="number" id="f-income" class="f-expense-input" placeholder="Es. 3000" min="0">
-                                            <button class="clear-input-btn" data-target="f-income" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                        </div>
-                                    </div>
-
-                                    <h3>Spese Mensili Fisse</h3>
-
-                                    <div class="expenses-grid">
-                                        <div class="input-group">
-                                            <label for="f-rent"><i class="fa-solid fa-house"></i> Affitto/Mutuo</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-rent" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-rent" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-bills"><i class="fa-solid fa-bolt"></i> Bollette</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-bills" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-bills" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-auto"><i class="fa-solid fa-car"></i> Auto/Trasporti</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-auto" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-auto" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-food"><i class="fa-solid fa-basket-shopping"></i> Spesa/Cibo</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-food" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-food" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-subs"><i class="fa-solid fa-rotate"></i> Abbonamenti</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-subs" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-subs" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-leisure"><i class="fa-solid fa-gamepad"></i> Svago</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-leisure" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-leisure" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-shopping"><i class="fa-solid fa-bag-shopping"></i> Shopping</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-shopping" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-shopping" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="f-extra"><i class="fa-solid fa-plus"></i> Extra</label>
-                                            <div class="input-wrapper">
-                                                <input type="number" id="f-extra" class="f-expense-input" placeholder="0" min="0">
-                                                <button class="clear-input-btn" data-target="f-extra" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-
-                                <!-- Resoconto Famiglia -->
+                                <!-- Resoconto Famiglia (Spostato in alto per Mobile) -->
                                 <section id="f-summary-section" class="glass-panel summary-section">
-                                    <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-chart-line"></i> Resoconto Famigliare</h2>
+                                    <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-chart-line"></i> <span data-i18n="family_summary">Resoconto Famigliare</span></h2>
 
                                     <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
                                         <div class="summary-card">
-                                            <span class="label">Entrate</span>
+                                            <span class="label" data-i18n="income">Entrate</span>
                                             <span class="value success" id="f-summary-income">€0.00</span>
                                         </div>
                                         <div class="summary-card">
-                                            <span class="label">Uscite</span>
+                                            <span class="label" data-i18n="expenses">Uscite</span>
                                             <span class="value danger" id="f-summary-expenses">€0.00</span>
                                         </div>
                                         <div class="summary-card main-card" style="padding: 0; background: none; border: none; min-height: 240px; grid-column: 1 / -1;">
                                             <div class="virtual-card card-style-ocean" id="virtual-card-family" style="margin: 0; width: 100%; height: 100%;">
                                                 <div class="card-chip"></div>
-                                                <div class="card-label">Rimanenza Comune</div>
+                                                <div class="card-label" data-i18n="shared_remainder">Rimanenza Comune</div>
                                                 <div id="f-summary-remaining" class="card-balance">€0.00</div>
                                                 <div class="card-footer-info">
-                                                    <div class="card-user-name" id="virtual-card-family-name">FINANZA FAMIGLIA</div>
+                                                    <div class="card-user-name" id="virtual-card-family-name" data-i18n="family_finance_caps">FINANZA FAMIGLIA</div>
                                                     <div class="card-logo" id="f-members-count"><i class="fa-solid fa-users"></i></div>
                                                 </div>
                                             </div>
                                         </div>
 
                                     <div class="advice-box" id="family-advice-box" style="margin-top: 1rem; width: 100%; grid-column: 1 / -1;">
-                                        <h3 style="margin-bottom: 1rem; color: var(--text-muted);"><i class="fa-solid fa-users"></i> Membri della Famiglia</h3>
-                                        <p style="margin-bottom: 1.5rem; font-size: 0.9rem; opacity: 0.8;">Collaborazione in tempo reale. I membri possono vedere e modificare il budget.</p>
+                                        <h3 style="margin-bottom: 1rem; color: var(--text-muted);"><i class="fa-solid fa-users"></i> <span data-i18n="family_members">Membri della Famiglia</span></h3>
+                                        <p style="margin-bottom: 1.5rem; font-size: 0.9rem; opacity: 0.8;" data-i18n="family_collaboration_desc">Collaborazione in tempo reale. I membri possono vedere e modificare il budget.</p>
                                         <div id="family-members-list-main" class="family-members-grid">
                                             <!-- Members List -->
                                         </div>
                                         
-                                        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--text-muted);"><i class="fa-solid fa-list-ul"></i> Movimenti Recenti</h3>
+                                        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--text-muted);"><i class="fa-solid fa-list-ul"></i> <span data-i18n="recent_movements">Movimenti Recenti</span></h3>
                                         <div id="f-recent-movements-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto;">
                                             <p style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="no_recent_movements">Nessun movimento recente.</p>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- Colonna Input Dati (Spostata sotto il resoconto su Mobile) -->
+                                <section class="glass-panel input-section">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                                        <h2 style="margin: 0;"><i class="fa-solid fa-wallet"></i> <span data-i18n="family_budget">Il Tuo Budget Famigliare</span></h2>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="f-income" data-i18n="common_monthly_income">Reddito Comune Mensile (€)</label>
+                                        <div class="input-wrapper">
+                                            <i class="fa-solid fa-euro-sign"></i>
+                                            <input type="number" id="f-income" class="f-expense-input" placeholder="Es. 3000" min="0" data-i18n-placeholder="placeholder_income_f">
+                                            <button class="clear-input-btn" data-target="f-income" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <h3 data-i18n="fixed_monthly_expenses">Spese Mensili Fisse</h3>
+
+                                    <div class="expenses-grid">
+                                        <div class="input-group">
+                                            <label for="f-rent"><i class="fa-solid fa-house"></i> <span data-i18n="cat_rent">Affitto/Mutuo</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-rent" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-rent" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-bills"><i class="fa-solid fa-bolt"></i> <span data-i18n="cat_bills">Bollette</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-bills" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-bills" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-auto"><i class="fa-solid fa-car"></i> <span data-i18n="cat_auto">Auto/Trasporti</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-auto" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-auto" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-food"><i class="fa-solid fa-basket-shopping"></i> <span data-i18n="cat_food">Spesa/Cibo</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-food" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-food" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-subs"><i class="fa-solid fa-rotate"></i> <span data-i18n="cat_subs">Abbonamenti</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-subs" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-subs" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-leisure"><i class="fa-solid fa-gamepad"></i> <span data-i18n="cat_leisure">Svago</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-leisure" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-leisure" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-shopping"><i class="fa-solid fa-bag-shopping"></i> <span data-i18n="cat_shopping">Shopping</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-shopping" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-shopping" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="f-extra"><i class="fa-solid fa-plus"></i> <span data-i18n="cat_extra">Extra</span></label>
+                                            <div class="input-wrapper">
+                                                <input type="number" id="f-extra" class="f-expense-input" placeholder="0" min="0">
+                                                <button class="clear-input-btn" data-target="f-extra" aria-label="Azzera"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -821,14 +821,13 @@
                                         <button id="f-next-month" class="icon-btn" style="position: static; background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--panel-border); margin: 0;"><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
                                     <div class="calendar-days-header">
-                                        <div class="day-name">Lun</div>
-                                        <div class="user-info-text"><span data-i18n="loading">Caricamento...</span></div>
-                                        <div class="day-name">Mar</div>
-                                        <div class="day-name">Mer</div>
-                                        <div class="day-name">Gio</div>
-                                        <div class="day-name">Ven</div>
-                                        <div class="day-name">Sab</div>
-                                        <div class="day-name">Dom</div>
+                                        <div class="day-name" data-i18n="mon">Lun</div>
+                                        <div class="day-name" data-i18n="tue">Mar</div>
+                                        <div class="day-name" data-i18n="wed">Mer</div>
+                                        <div class="day-name" data-i18n="thu">Gio</div>
+                                        <div class="day-name" data-i18n="ven">Ven</div>
+                                        <div class="day-name" data-i18n="sat">Sab</div>
+                                        <div class="day-name" data-i18n="sun">Dom</div>
                                     </div>
                                     <div id="f-calendar-grid" class="calendar-grid">
                                         <!-- Shared calendar cells -->
