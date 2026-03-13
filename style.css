@@ -2931,106 +2931,144 @@ body.family-mode-active .primary-btn:not(.secondary-btn) {
     padding: 6px 10px;
 }
 
-/* --- Compact Mobile Optimization (max-width: 600px) --- */
+/* --- Ultra-Compact Mobile Optimization (max-width: 600px) --- */
 @media (max-width: 600px) {
     .app-container {
-        padding: 0 0.8rem;
-        padding-bottom: 70px;
+        padding: 0 0.6rem;
+        padding-bottom: 65px;
+    }
+
+    header {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .header-top {
+        margin-bottom: 0.8rem !important;
+        gap: 0.5rem !important;
     }
 
     .glass-panel {
-        padding: 1.2rem !important;
-        margin-bottom: 1rem !important;
+        padding: 1rem !important;
+        margin-bottom: 0.8rem !important;
+        border-radius: 12px !important;
     }
 
     h2 {
-        font-size: 1.4rem !important;
-        margin-bottom: 1rem !important;
+        font-size: 1.25rem !important;
+        margin-bottom: 0.8rem !important;
     }
 
     h3 {
-        font-size: 1.1rem !important;
-        margin-bottom: 0.8rem !important;
+        font-size: 1rem !important;
+        margin-bottom: 0.6rem !important;
     }
 
     .input-group {
-        margin-bottom: 0.8rem !important;
+        margin-bottom: 0.6rem !important;
     }
 
     .input-group label {
-        font-size: 0.85rem !important;
-        margin-bottom: 0.3rem !important;
+        font-size: 0.8rem !important;
+        margin-bottom: 0.2rem !important;
     }
 
     .input-wrapper input {
-        padding: 0.6rem 0.8rem !important;
-        font-size: 0.9rem !important;
+        padding: 0.5rem 0.7rem !important;
+        font-size: 0.85rem !important;
+        height: 36px !important;
     }
 
-    /* Virtual Card Compact */
+    /* Virtual Card Ultra-Compact */
     .virtual-card {
-        min-height: 160px !important;
-        padding: 1.2rem !important;
-        margin-bottom: 1rem !important;
+        min-height: 135px !important;
+        padding: 1rem !important;
+        margin-bottom: 0.8rem !important;
     }
 
     .card-balance {
-        font-size: 1.6rem !important;
-        margin: 0.5rem 0 !important;
+        font-size: 1.35rem !important;
+        margin: 0.3rem 0 !important;
     }
 
     .card-label {
-        font-size: 0.7rem !important;
+        font-size: 0.65rem !important;
     }
 
     .card-chip {
-        width: 35px !important;
-        height: 25px !important;
+        width: 30px !important;
+        height: 20px !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .card-footer-info i {
+        font-size: 1.5rem !important;
+    }
+
+    /* Summary Card Details */
+    .summary-card.main-card {
+        height: auto !important;
+        min-height: auto !important;
+    }
+
+    .summary-cards {
+        gap: 0.5rem !important;
+    }
+
+    .summary-card {
+        padding: 0.8rem !important;
     }
 
     /* Expenses Grid Economy */
     .expenses-grid {
-        gap: 0.6rem !important;
+        gap: 0.5rem !important;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
     }
 
     .expense-input {
-        height: 38px !important;
+        height: 34px !important;
     }
 
-    /* Family Members List */
-    .family-members-grid {
-        gap: 8px !important;
+    /* Calendar Slimming */
+    .calendar-header {
+        padding: 0.5rem 1rem !important;
+        margin-bottom: 1rem !important;
     }
 
-    .family-member {
-        padding: 5px 8px !important;
-        font-size: 0.75rem !important;
+    .calendar-grid {
+        gap: 4px !important;
     }
 
-    /* Dashboard Overview */
-    .dashboard-overview-grid {
-        gap: 1rem !important;
-    }
-
-    .guide-card {
-        padding: 1.2rem !important;
+    .calendar-day {
+        min-height: 40px !important;
+        font-size: 0.8rem !important;
     }
 
     /* Navigation Slimming */
     .app-nav {
-        height: 60px !important;
+        height: 55px !important;
     }
 
     .nav-btn {
-        padding: 0.4rem !important;
+        padding: 0.3rem !important;
     }
 
     .nav-btn i {
-        font-size: 1.1rem !important;
-        margin-bottom: 2px !important;
+        font-size: 1rem !important;
     }
 
     .nav-btn span {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
+    }
+
+    /* Advice Box */
+    .advice-box {
+        padding: 0.8rem !important;
+        margin-top: 1rem !important;
+    }
+
+    .advice-list li {
+        font-size: 0.8rem !important;
+        margin-bottom: 0.4rem !important;
     }
 }
